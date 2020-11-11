@@ -1,5 +1,6 @@
 const Images = {
-    splashScreen: require('./splash.jpg')
+    splashScreen: require('./splash.jpg'),
+    party: require('./party.png')
 }
 
 export default Images;

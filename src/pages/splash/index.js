@@ -1,4 +1,4 @@
-import CheckBox from '@react-native-community/checkbox';
+import AsyncStorage from '@react-native-community/async-storage';
 import React, { Component } from 'react'
 import { 
     View, Text, 
@@ -20,11 +20,79 @@ class Splash extends Component {
     }
 
     componentDidMount() {
+        this.dataEvent();
         // BackHandler.addEventListener('hardwareBackPress', this.backPressed);
         setTimeout(() => {
             this.props.navigation.replace('Login')
         }, 2000);
-	}
+    }
+    
+    setItem = async (key, item) => {
+        try {
+            await AsyncStorage.setItem(key, item);
+            console.log(await AsyncStorage.getItem(key))
+        } catch(err) {
+            console.log("Something wrong => " + err)
+        }
+    }
+
+    dataEvent() {
+        const dataEvent = [
+            {
+                name: "Metallica Concert",
+                location: "Palace Grounds",
+                entry: "paid"
+            },
+            {
+                name: "Saree Exhibition",
+                location: "Malleswaram Grounds",
+                entry: "free"
+            },
+            {
+                name: "Wine tasting event",
+                location: "Links Brewery",
+                entry: "paid"
+            },
+            {
+                name: "Startups Meet",
+                location: "Kanteerava Indoor Stadium",
+                entry: "paid"
+            },
+            {
+                name: "Summer Noon Party",
+                location: "Kumara Park",
+                entry: "paid"
+            },
+            {
+                name: "Rock and Roll nights",
+                location: "Sarjapur Road",
+                entry: "paid"
+            },
+            {
+                name: "Barbecue Fridays",
+                location: "Whitefield",
+                entry: "paid"
+            },
+            {
+                name: "Summer workshop",
+                location: "Indiranagar",
+                entry: "free"
+            },
+            {
+                name: "Impressions & Expressions",
+                location: "MG Road",
+                entry: "free"
+            },
+            {
+                name: "Italian carnival",
+                location: "Electronic City",
+                entry: "free"
+            },
+        ]
+        const dataEventParse = JSON.stringify(dataEvent);
+
+        this.setItem("dataEvent", dataEventParse);
+    }
 
     render() {
         return(
