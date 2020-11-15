@@ -23,11 +23,7 @@ class MonitoringEvent extends Component {
     }
 
     backPressed = () => {
-        if(this.props.route.params.intent == "details"){
-            this.props.navigation.navigate('HomeNavigation')
-        } else {
-            BackHandler.exitApp();
-        }
+        BackHandler.exitApp();
 		return true;
     };
 
