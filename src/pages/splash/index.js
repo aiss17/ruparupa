@@ -41,52 +41,62 @@ class Splash extends Component {
             {
                 name: "Metallica Concert",
                 location: "Palace Grounds",
-                entry: "paid"
+                entry: "paid",
+                type: "concert"
             },
             {
                 name: "Saree Exhibition",
                 location: "Malleswaram Grounds",
-                entry: "free"
+                entry: "free",
+                type: "exhibition"
             },
             {
                 name: "Wine tasting event",
                 location: "Links Brewery",
-                entry: "paid"
+                entry: "paid",
+                type: "party"
             },
             {
                 name: "Startups Meet",
                 location: "Kanteerava Indoor Stadium",
-                entry: "paid"
+                entry: "paid",
+                type: "meeting"
             },
             {
                 name: "Summer Noon Party",
                 location: "Kumara Park",
-                entry: "paid"
+                entry: "paid",
+                type: "party"
             },
             {
                 name: "Rock and Roll nights",
                 location: "Sarjapur Road",
-                entry: "paid"
+                entry: "paid",
+                type: "concert"
             },
             {
                 name: "Barbecue Fridays",
                 location: "Whitefield",
-                entry: "paid"
+                entry: "paid",
+                type: "meeting"
             },
             {
                 name: "Summer workshop",
                 location: "Indiranagar",
-                entry: "free"
+                entry: "free",
+                type: "meeting"
             },
             {
                 name: "Impressions & Expressions",
                 location: "MG Road",
-                entry: "free"
+                entry: "free",
+                type: "meeting"
             },
             {
                 name: "Italian carnival",
                 location: "Electronic City",
-                entry: "free"
+                entry: "free",
+                type: "meeting"
             },
         ]
         const dataEventParse = JSON.stringify(dataEvent);

@@ -8,7 +8,7 @@ import {
 import { Descriptions, Images } from '../../assets';
 import Icon from 'react-native-vector-icons/Entypo';
 
-class Home extends Component {
+class MonitoringEvent extends Component {
     constructor(props) {
         super(props);
 
@@ -16,37 +16,29 @@ class Home extends Component {
             username: '',
             dataUser: [], 
             dataEvent: [],
-            dataEventUser: [],
             listVisible: true,
-            gridVisible: false
+            gridVisible: false,
+            isFetching: false
         }
     }
 
     backPressed = () => {
-		BackHandler.exitApp();
+        if(this.props.route.params.intent == "details"){
+            this.props.navigation.navigate('HomeNavigation')
+        } else {
+            BackHandler.exitApp();
+        }
 		return true;
     };
 
     componentDidMount() {
         this.dataUser()
-        this.dataEvent()
         this.dataLogin()
+        this.dataMonitoring()
 		BackHandler.addEventListener('hardwareBackPress', this.backPressed);
 	}
 	componentWillUnmount() {
 		BackHandler.removeEventListener('hardwareBackPress', this.backPressed);
-    }
-    
-    dataEvent = async () => {
-        try {
-            const dataEvent = await AsyncStorage.getItem("dataEvent")
-    
-            if(dataEvent != null) {
-                this.setState({ dataEvent: JSON.parse(dataEvent) })
-            }
-        } catch (error) {
-            console.log("Something wrong => " + error)
-        }
     }
 
     dataUser = async () => {
@@ -73,6 +65,28 @@ class Home extends Component {
         }
     }
 
+    async dataMonitoring() {
+        let checkEvent;
+        let data = await AsyncStorage.getItem('dataUser')
+        let parseData = JSON.parse(data)
+        let indexID = parseData.findIndex((val) => val.nama === this.state.username)
+        if(indexID != -1) {
+            checkEvent = parseData[indexID].event
+        }
+        console.log(parseData[indexID].event)
+
+        if(checkEvent != null){
+            console.log('masuk')
+            this.setState({
+                dataEvent: checkEvent
+            })
+        }
+
+        this.setState({
+            isFetching: false
+        })
+    }
+
     toggleListGrid() {
         if(this.state.listVisible) {
             this.setState({
@@ -86,6 +100,10 @@ class Home extends Component {
             })
         }
     }
+
+    onRefresh() {
+        this.setState({isFetching: true,},() => {this.dataMonitoring();});
+   }
 
     render() {
         return (
@@ -113,6 +131,8 @@ class Home extends Component {
                         style= {{ marginTop: 10 }}
                         data= {this.state.dataEvent}
                         // extraData={this.state}
+                        onRefresh={() => this.onRefresh()}
+                        refreshing={this.state.isFetching}
                         keyExtractor={(item, index) => String(index)}
                         renderItem={({ item, index }) => {
                             return(
@@ -213,6 +233,11 @@ class Home extends Component {
                     />
                 )}
 
+                <View style={{ justifyContent: 'center', alignItems: 'center', marginBottom: 10 }}>
+                    <Text style={{ color: '#828282' }}>Pull to refresh...</Text>
+                </View>
+                
+
                 <TouchableOpacity
                     activeOpacity={0.7}
                     style={styles.touchableOpacityStyle}
@@ -226,10 +251,9 @@ class Home extends Component {
             </View>
         )
     }
+
 }
-
-export default Home;
-
+export default MonitoringEvent;
 const styles = StyleSheet.create({
     touchableOpacityStyle: {
         position: 'absolute',

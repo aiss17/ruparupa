@@ -10,13 +10,12 @@ class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            username: '',
-            dataOtherUser: []
+            username: ''
         }
     }
 
     backPressed = () => {
-		BackHandler.exitApp();
+    	BackHandler.exitApp();
 		return true;
     };
 
@@ -30,31 +29,50 @@ class Login extends Component {
     setItem = async (key, item) => {
         try {
             await AsyncStorage.setItem(key, item);
-            console.log(await AsyncStorage.getItem(key))
+            console.log("Data baru yang dibuat => " + await AsyncStorage.getItem(key))
         } catch(err) {
             console.log("Something wrong => " + err)
         }
     }
 
     pushUser = async (key, item) => {
-        const getOtherUser = await AsyncStorage.getItem(key)
-        if(getOtherUser != null) {
-            const getOtherUserParse = JSON.parse(getOtherUser);
-            console.log(JSON.parse(getOtherUser))
-            const dataUser = 
-            {
-                nama: item,
-                event: []
+        await AsyncStorage.setItem("dataLogin", item);
+        let dataUser = await AsyncStorage.getItem('dataUser')
+
+        console.log(await AsyncStorage.getItem('dataUser'))
+        let parseData = JSON.parse(dataUser)
+
+        if(parseData != null) {
+            let indexID = parseData.findIndex((val) => val.nama == this.state.username)
+
+            if (indexID != -1) {
+                setTimeout(() => {
+                    this.props.navigation.navigate('HomeNavigation', {
+                        screen : 'Home',
+                        params : {
+                            haha: 'haha'
+                        }
+                    })
+                }, 2000);
+            } else {
+                const dataUser = 
+                {
+                    nama: item,
+                    event: []
+                }
+        
+                parseData.push(dataUser)
+                const dataUserParse = JSON.stringify(parseData)
+                this.setItem(key, dataUserParse)
+                setTimeout(() => {
+                    this.props.navigation.navigate('HomeNavigation', {
+                        screen : 'Home',
+                        params : {
+                            haha: 'haha'
+                        }
+                    })
+                }, 2000);
             }
-    
-            getOtherUserParse.push(dataUser)
-            const dataUserParse = JSON.stringify(getOtherUserParse)
-            this.setItem("dataUser", dataUserParse)
-            setTimeout(() => {
-                this.props.navigation.replace('Home', {
-                    dataUser: dataUser
-                })
-            }, 2000);
         } else {
             const dataUser = [ 
                 {
@@ -64,24 +82,29 @@ class Login extends Component {
             ]
     
             const dataUserParse = JSON.stringify(dataUser)
-            this.setItem("dataUser", dataUserParse)
+            this.setItem(key, dataUserParse)
             setTimeout(() => {
-                this.props.navigation.navigate('Home', {
-                    dataUser: dataUser
+                this.props.navigation.navigate('HomeNavigation', {
+                    screen : 'Home',
+                    params : {
+                        haha: 'haha'
+                    }
                 })
             }, 2000);
         }
+        parseData = parseData == null? [] : parseData
+        let indexID = parseData.findIndex((val) => val.nama == this.state.username)
+        
     }
 
     sementara(key, item) {
-        console.log("hahahaha => " + item)
+        console.log("username nya adalah => " + item)
         if(item == null || item == '') {
             Alert.alert(
                 'Warning',
                 'Please enter your name below'
             )
         } else {
-            console.log("error")
             this.pushUser(key, item)
         }
     }
